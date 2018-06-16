@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2010-2013 the original author or authors. Licensed under the
+	Apache License, Version 2.0 (the "License"); you may not use this file except
+	in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+	Unless required by applicable law or agreed to in writing, software distributed
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for
+	the specific language governing permissions and limitations under the License. -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wang.mapper.ImportDrugsMapper">
+    <insert id="addImportDrugs" parameterType="com.wang.model.ImportDrugs">
+        INSERT INTO importdrugs(zczh,yzczh,zczhbz,fbzpzwh,gsmczw,gsmcyw,dzzw,dzyw,gjdqzw,gjdqyw,
+        cpmczw,cpmcyw,spmzw,spmyw,jx,gg,bzgg,sccszw,sccsyw,csdzzw,csdzyw,csgjzw,csgjyw,fzrq,yxqjzr,
+        fbzqymc,fbzqydz,fbzwhpzrq,fbzwhyxqjzr,cplb,ypbwm,ypbwmbz)
+        VALUES (#{drug.zczh},#{drug.yzczh},#{drug.zczhbz},#{drug.fbzpzwh},#{drug.gsmczw},#{drug.gsmcyw},#{drug.dzzw},#{drug.dzyw},#{drug.gjdqzw},#{drug.gjdqyw}
+        ,#{drug.cpmczw},#{drug.cpmcyw},#{drug.spmzw},#{drug.spmyw},#{drug.jx},#{drug.gg},#{drug.bzgg},#{drug.sccszw},#{drug.sccsyw},#{drug.csdzzw},#{drug.csdzyw},#{drug.csgjzw},#{drug.csgjyw},#{drug.fzrq},#{drug.yxqjzr}
+        ,#{drug.fbzqymc},#{drug.fbzqydz},#{drug.fbzwhpzrq},#{drug.fbzwhyxqjzr},#{drug.cplb},#{drug.ypbwm},#{drug.ypbwmbz})
+    </insert>
+</mapper>

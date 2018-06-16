@@ -1,7 +1,7 @@
 spring:
     datasource:
         name: test
-        url: jdbc:mysql://localhost:3306/example
+        url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8
         username: root
         password: mysqladmin
         # 使用druid数据源
