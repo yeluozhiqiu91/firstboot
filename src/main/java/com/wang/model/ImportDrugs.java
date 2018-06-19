@@ -4,7 +4,7 @@ package com.wang.model;
  * @Author: wangliujie
  * @Date: 2018/6/16 15:58
  */
-public class ImportDrugs {
+public class ImportDrugs  extends BaseModel{
     private int id;//id
     private String zczh;            //注册证号
     private String yzczh;           //原注册证号

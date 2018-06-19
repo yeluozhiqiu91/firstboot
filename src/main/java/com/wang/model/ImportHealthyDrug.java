@@ -3,7 +3,7 @@ package com.wang.model;
 /**
  * 进口保健品
  */
-public class ImportHealthyDrug {
+public class ImportHealthyDrug extends BaseModel{
     public String productor_name_en;///    //    生产企业英文名称
     public String unregister_reason;// //            注销原因
     public String addre;// //    地址
@@ -46,6 +46,52 @@ public class ImportHealthyDrug {
 
 
     public String url;//    页面地址
+
+    @Override
+    public String toString() {
+        return "ImportHealthyDrug{" +
+                "productor_name_en='" + productor_name_en + '\'' +
+                ", unregister_reason='" + unregister_reason + '\'' +
+                ", addre='" + addre + '\'' +
+                ", health_func='" + health_func + '\'' +
+                ", constitute='" + constitute + '\'' +
+                ", main_material='" + main_material + '\'' +
+                ", unlimite_scope='" + unlimite_scope + '\'' +
+                ", limite_scope='" + limite_scope + '\'' +
+                ", specification='" + specification + '\'' +
+                ", expiration_date='" + expiration_date + '\'' +
+                ", reserve_method='" + reserve_method + '\'' +
+                ", lookout='" + lookout + '\'' +
+                ", approval_change_date='" + approval_change_date + '\'' +
+                ", changed_content='" + changed_content + '\'' +
+                ", record_date='" + record_date + '\'' +
+                ", exchanger_name='" + exchanger_name + '\'' +
+                ", exchanger_name_en='" + exchanger_name_en + '\'' +
+                ", exchanger_addre='" + exchanger_addre + '\'' +
+                ", taker='" + taker + '\'' +
+                ", taker_addr='" + taker_addr + '\'' +
+                ", approval_before='" + approval_before + '\'' +
+                ", exchange_date='" + exchange_date + '\'' +
+                ", supplement_date='" + supplement_date + '\'' +
+                ", extra_hint='" + extra_hint + '\'' +
+                ", product_name_en='" + product_name_en + '\'' +
+                ", approval_date='" + approval_date + '\'' +
+                ", applicant_chinese_name='" + applicant_chinese_name + '\'' +
+                ", product_sn='" + product_sn + '\'' +
+                ", approval='" + approval + '\'' +
+                ", product_name='" + product_name + '\'' +
+                ", applicant_name='" + applicant_name + '\'' +
+                ", applicant_addre='" + applicant_addre + '\'' +
+                ", company_name='" + company_name + '\'' +
+                ", produce_county='" + produce_county + '\'' +
+                ", use_illustration='" + use_illustration + '\'' +
+                ", record_content='" + record_content + '\'' +
+                ", taker_en='" + taker_en + '\'' +
+                ", validate_date_to='" + validate_date_to + '\'' +
+                ", unregister_date='" + unregister_date + '\'' +
+                ", url='" + url + '\'' +
+                '}';
+    }
 
     public String getUrl() {
         return url;

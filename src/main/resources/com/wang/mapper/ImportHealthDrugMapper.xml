@@ -52,6 +52,7 @@
         taker_en,
         validate_date_to,
         unregister_date,
+        pageId,
         url
         )
 
@@ -96,6 +97,7 @@
         #{item.taker_en},
         #{item.validate_date_to},
         #{item.unregister_date},
+        #{item.pageId},
         #{item.url}
         )
     </insert>

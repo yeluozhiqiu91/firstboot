@@ -23,7 +23,7 @@ import static com.wang.chrome.Const.ChromeDriver_path;
  */
 @Controller
 public class ImportedHealthDrugController {
-    private static final int MAX_WORK_THEARD = Runtime.getRuntime().availableProcessors()+6;
+    private static final int MAX_WORK_THEARD = Runtime.getRuntime().availableProcessors() + 6;
 
     public static String baseurl = "http://app1.sfda.gov.cn/datasearch/face3/content.jsp?tableId=31&tableName=TABLE31&tableView=进口保健食品&Id=";
 
@@ -46,15 +46,22 @@ public class ImportedHealthDrugController {
 
     private ImportHealthyDrug detectPage(WebDriver webdriver, int pageId) {
         ImportHealthyDrug model = null;
+        try {
+            model = null;
 
-        String url = baseurl + (pageId);
-        webdriver.get(url);
-        if (webdriver.findElement(By.cssSelector(".listmain")).findElements(By.tagName("tr")).get(2).getText().equals("没有相关信息")) {//空白页
-            System.out.println("----  " + pageId);
-            return null;
-        } else {
-            List<WebElement> webElementList = webdriver.findElement(By.cssSelector(".listmain")).findElements(By.tagName("tr"));
-            model = initPageItem(webElementList, url);
+            String url = baseurl + (pageId);
+            webdriver.get(url);
+            if (webdriver.findElement(By.cssSelector(".listmain")).findElements(By.tagName("tr")).get(2).getText().equals("没有相关信息")) {//空白页
+                System.out.println("----  " + pageId);
+                return null;
+            } else {
+                List<WebElement> webElementList = webdriver.findElement(By.cssSelector(".listmain")).findElements(By.tagName("tr"));
+                model = initPageItem(webElementList, url);
+                model.pageId = pageId;
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return model;
     }
@@ -236,7 +243,12 @@ public class ImportedHealthDrugController {
 
                     for (ImportHealthyDrug model :
                             taskList) {
-                        service.addItem(model);
+                        try {
+                            service.addItem(model);
+                        } catch (Exception e) {
+                            System.out.println(model.toString());
+                            e.printStackTrace();
+                        }
                     }
 
                     System.out.println((System.currentTimeMillis() - start) / 1000.0 + "秒结束。");
@@ -248,7 +260,6 @@ public class ImportedHealthDrugController {
             });
 
         }
-
     }
 
 
