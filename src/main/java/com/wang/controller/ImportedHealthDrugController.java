@@ -29,25 +29,35 @@ public class ImportedHealthDrugController {
 
     ExecutorService executor = Executors.newCachedThreadPool();
 
-
+    List<Long> existsList = new ArrayList<Long>();
     @Autowired
     private ImportHealthDrugService service;
 
     @RequestMapping("/query")
-    public String queryPageIds(){
-        List<Long> list=service.queryPageIds();
+    public String queryPageIds() {
+        List<Long> list = service.queryPageIds();
         System.out.println(list.size());
         return "success";
     }
+
     @RequestMapping("/addImportedHealthDrug")
     @ResponseBody
     public String addItem() {
         System.setProperty("webdriver.chrome.driver", ChromeDriver_path);
         List<ImportHealthyDrug> taskList = new ArrayList<ImportHealthyDrug>();
+        existsList = service.queryPageIds();
 
         dividMainWorkThreads(MAX_WORK_THEARD, 1000);
 //        dividMainWorkThreads(MAX_WORK_THEARD, 10);
         return "添加成功！";
+    }
+
+    public boolean isExist(long pageid) {
+        if (existsList != null && existsList.size() > 0) {
+            return existsList.contains(pageid);
+        } else {
+            return false;
+        }
     }
 
     private ImportHealthyDrug detectPage(WebDriver webdriver, int pageId) {
@@ -250,6 +260,11 @@ public class ImportedHealthDrugController {
                     System.out.println("开始 from page ( " + finalFromIndex + " to " + finalToIndex);
 
                     for (int page = finalFromIndex; page <= finalToIndex; page++) {//主要分页
+                        if (isExist(page)) {
+                            System.out.println("page is exixt" + page);
+                            continue;
+                        }
+
                         ImportHealthyDrug model = detectPage(webdriver, page);
                         if (model != null) {
                             taskList.add(model);
