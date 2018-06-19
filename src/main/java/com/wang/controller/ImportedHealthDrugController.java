@@ -51,7 +51,16 @@ public class ImportedHealthDrugController {
 
             String url = baseurl + (pageId);
             webdriver.get(url);
-            if (webdriver.findElement(By.cssSelector(".listmain")).findElements(By.tagName("tr")).get(2).getText().equals("没有相关信息")) {//空白页
+
+            boolean haspage = true;
+            try {
+                haspage = webdriver.findElement(By.cssSelector(".listmain")).findElements(By.tagName("tr")).get(2).getText().equals("没有相关信息");
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("没有相关信息 页面错误" + pageId);
+            }
+
+            if (haspage) {//空白页
                 System.out.println("----  " + pageId);
                 return null;
             } else {
