@@ -25,7 +25,7 @@ import static com.wang.chrome.Const.MAX_WORK_THEARD;
 @Controller
 public class HomeMadeHealthDrugController {
 
-//    public static String baseurl = "http://app1.sfda.gov.cn/datasearch/face3/content.jsp?tableId=31&tableName=TABLE31&tableView=进口保健食品&Id=";
+    //    public static String baseurl = "http://app1.sfda.gov.cn/datasearch/face3/content.jsp?tableId=31&tableName=TABLE31&tableView=进口保健食品&Id=";
     public static String baseurl = "http://app1.sfda.gov.cn/datasearch/face3/content.jsp?tableId=30&tableName=TABLE30&tableView=国产保健食品&Id=";
 
     ExecutorService executor = Executors.newCachedThreadPool();
@@ -48,7 +48,7 @@ public class HomeMadeHealthDrugController {
 //        existsList = service.queryPageIds();
 
 //        dividMainWorkThreads(MAX_WORK_THEARD, 1000);
-        dividMainWorkThreads(MAX_WORK_THEARD-6, 10);
+        dividMainWorkThreads(1, 2);
         return "添加成功！";
     }
 
@@ -74,6 +74,7 @@ public class HomeMadeHealthDrugController {
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("没有相关信息 页面错误" + pageId);
+                haspage = false;
             }
 
             if (haspage) {//空白页
@@ -94,7 +95,7 @@ public class HomeMadeHealthDrugController {
     private HomeMadeHealthyDrug initPageItem(List<WebElement> webElementList, String url) {
         HomeMadeHealthyDrug item = new HomeMadeHealthyDrug();
         item.url = url;
-        for (int k = 1; k <= 39; k++) {
+        for (int k = 1; k <= 32; k++) {
             String value = webElementList.get(k).findElements(By.tagName("td")).get(1).getText();
             switch (k) {
                 case 1:
@@ -240,10 +241,10 @@ public class HomeMadeHealthDrugController {
                     System.out.println("开始 from page ( " + finalFromIndex + " to " + finalToIndex);
 
                     for (int page = finalFromIndex; page <= finalToIndex; page++) {//主要分页
-                        if (isExist(page)) {
-                            System.out.println("page is exixt" + page);
-                            continue;
-                        }
+//                        if (isExist(page)) {
+//                            System.out.println("page is exixt" + page);
+//                            continue;
+//                        }
 
                         HomeMadeHealthyDrug model = detectPage(webdriver, page);
                         if (model != null) {

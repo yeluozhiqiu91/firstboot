@@ -97,7 +97,7 @@ public class HomeMadeInstrumentController {
     private HomeMadeInstrument initPageItem(List<WebElement> webElementList, String url) {
         HomeMadeInstrument item = new HomeMadeInstrument();
         item.url = url;
-        for (int k = 1; k <= 39; k++) {
+        for (int k = 1; k <= 23; k++) {
             String value = webElementList.get(k).findElements(By.tagName("td")).get(1).getText();
             switch (k) {
                 case 1:
