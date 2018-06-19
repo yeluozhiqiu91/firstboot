@@ -1,6 +1,6 @@
 package com.wang.service.impl;
 
-import com.wang.mapper.ImportDrugsMapper;
+import com.wang.controller.ImportedHealthDrugController;
 import com.wang.model.ImportDrugs;
 import com.wang.service.ImportDrugsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class ImportDrugsServiceImpl implements ImportDrugsService {
     @Autowired
-    private ImportDrugsMapper importDrugsMapper;
+    private ImportedHealthDrugController controller;
     @Override
     public void addImportDrugs(ImportDrugs importDrugs) {
-        importDrugsMapper.addImportDrugs(importDrugs);
+        controller.addItem();
     }
 }

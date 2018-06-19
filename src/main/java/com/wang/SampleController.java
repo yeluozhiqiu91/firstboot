@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * Created by wang on 2017/12/26.
  */
 @SpringBootApplication
 @MapperScan("com.wang.mapper")
@@ -22,6 +21,11 @@ public class SampleController {
 
     public static void main(String[] args) {
         //System.setProperty("spring.devtools.restart.enabled","false");
-        SpringApplication.run(SampleController.class,args);
+        SpringApplication.run(SampleController.class,args);// 进口药品
+
+//        SpringApplication.run(SampleController.class,args);// 进口药品
+
+
+
     }
 }

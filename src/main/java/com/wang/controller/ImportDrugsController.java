@@ -14,20 +14,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.wang.chrome.Const.ChromeDriver_path;
+
 /**
- * @Author: wangliujie
- * @Date: 2018/6/16 17:45
  */
 @Controller
 public class ImportDrugsController {
-    public static String chromeDriver_path = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe";
     public static String baseurl="http://app1.sfda.gov.cn/datasearch/face3/content.jsp?tableId=36&tableName=TABLE36&tableView=%E8%BF%9B%E5%8F%A3%E8%8D%AF%E5%93%81&Id=";
     @Autowired
     private ImportDrugsService importDrugsService;
     @RequestMapping("/addImportDrugs")
     @ResponseBody
     public String addImportDrugs(){
-        System.setProperty("webdriver.chrome.driver", chromeDriver_path);
+        System.setProperty("webdriver.chrome.driver", ChromeDriver_path);
 
         // Instantiate a webDriver implementation
         WebDriver webdriver = new ChromeDriver();

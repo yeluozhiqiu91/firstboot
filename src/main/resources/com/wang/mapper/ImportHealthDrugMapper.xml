@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2010-2013 the original author or authors. Licensed under the
+	Apache License, Version 2.0 (the "License"); you may not use this file except
+	in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+	Unless required by applicable law or agreed to in writing, software distributed
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for
+	the specific language governing permissions and limitations under the License. -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wang.mapper.ImportHealthDrugMapper">
+    <insert id="insert" parameterType="com.wang.model.ImportHealthyDrug">
+        INSERT INTO importHealthdrugs
+        (
+        productor_name_en,
+        unregister_reason,
+        addre,
+        health_func,
+        constitute,
+        main_material,
+        unlimite_scope,
+        limite_scope,
+        specification,
+        expiration_date,
+        reserve_method,
+        lookout,
+        approval_change_date,
+        changed_content,
+        record_date,
+        exchanger_name,
+        exchanger_name_en,
+        exchanger_addre,
+        taker,
+        taker_addr,
+        approval_before,
+        exchange_date,
+        supplement_date,
+        extra_hint,
+        product_name_en,
+        approval_date,
+        applicant_chinese_name,
+        product_sn,
+        approval,
+        product_name,
+        applicant_name,
+        applicant_addre,
+        company_name,
+        produce_county,
+        use_illustration,
+        record_content,
+        taker_en,
+        validate_date_to,
+        unregister_date,
+        url
+        )
+
+        VALUES
+        (
+        #{item.productor_name_en},
+        #{item.unregister_reason},
+        #{item.addre},
+        #{item.health_func},
+        #{item.constitute},
+        #{item.main_material},
+        #{item.unlimite_scope},
+        #{item.limite_scope},
+        #{item.specification},
+        #{item.expiration_date},
+        #{item.reserve_method},
+        #{item.lookout},
+        #{item.approval_change_date},
+        #{item.changed_content},
+        #{item.record_date},
+        #{item.exchanger_name},
+        #{item.exchanger_name_en},
+        #{item.exchanger_addre},
+        #{item.taker},
+        #{item.taker_addr},
+        #{item.approval_before},
+        #{item.exchange_date},
+        #{item.supplement_date},
+        #{item.extra_hint},
+        #{item.product_name_en},
+        #{item.approval_date},
+        #{item.applicant_chinese_name},
+        #{item.product_sn},
+        #{item.approval},
+        #{item.product_name},
+        #{item.applicant_name},
+        #{item.applicant_addre},
+        #{item.company_name},
+        #{item.produce_county},
+        #{item.use_illustration},
+        #{item.record_content},
+        #{item.taker_en},
+        #{item.validate_date_to},
+        #{item.unregister_date},
+        #{item.url}
+        )
+    </insert>
+</mapper>
