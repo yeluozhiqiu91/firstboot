@@ -101,4 +101,7 @@
         #{item.url}
         )
     </insert>
+    <select id="queryPageIds" resultType="Long">
+        select pageId from importhealthdrugs
+    </select>
 </mapper>

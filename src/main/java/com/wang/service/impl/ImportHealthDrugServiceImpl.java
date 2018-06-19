@@ -6,6 +6,8 @@ import com.wang.service.ImportHealthDrugService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by wang on 2018/1/9.
  */
@@ -17,5 +19,10 @@ public class ImportHealthDrugServiceImpl implements ImportHealthDrugService {
     @Override
     public void addItem(ImportHealthyDrug item) {
         mapper.insert(item);//注解形式
+    }
+
+    @Override
+    public List<Long> queryPageIds() {
+        return mapper.queryPageIds();
     }
 }

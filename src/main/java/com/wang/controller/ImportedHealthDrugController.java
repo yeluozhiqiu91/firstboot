@@ -33,6 +33,12 @@ public class ImportedHealthDrugController {
     @Autowired
     private ImportHealthDrugService service;
 
+    @RequestMapping("/query")
+    public String queryPageIds(){
+        List<Long> list=service.queryPageIds();
+        System.out.println(list.size());
+        return "success";
+    }
     @RequestMapping("/addImportedHealthDrug")
     @ResponseBody
     public String addItem() {

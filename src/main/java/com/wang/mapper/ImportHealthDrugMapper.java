@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface ImportHealthDrugMapper {
     public void insert(@Param("item") ImportHealthyDrug item);
-
+    public List<Long> queryPageIds();
 }
