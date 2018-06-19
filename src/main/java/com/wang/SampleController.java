@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import static com.wang.chrome.Const.ChromeDriver_path;
+
 /**
  */
 @SpringBootApplication
@@ -20,11 +22,9 @@ public class SampleController {
     }
 
     public static void main(String[] args) {
-        //System.setProperty("spring.devtools.restart.enabled","false");
+        System.setProperty("webdriver.chrome.driver", ChromeDriver_path);
+
         SpringApplication.run(SampleController.class,args);// 进口药品
-
-//        SpringApplication.run(SampleController.class,args);// 进口药品
-
 
 
     }
