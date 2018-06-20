@@ -2,7 +2,6 @@ package com.wang.controller;
 
 import com.wang.model.HomeMadeInstrument;
 import com.wang.model.ImportHealthyDrug;
-import com.wang.service.ImportHealthDrugService;
 import com.wang.service.impl.HomeMadeInstrumentServiceImpl;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -19,15 +18,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static com.wang.chrome.Const.ChromeDriver_path;
+import static com.wang.chrome.Const.MAX_WORK_THEARD;
 
 /**
  * 国产器械
  */
 @Controller
 public class HomeMadeInstrumentController {
-    private static final int MAX_WORK_THEARD = Runtime.getRuntime().availableProcessors() + 6;
-
-//    public static String baseurl = "http://app1.sfda.gov.cn/datasearch/face3/content.jsp?tableId=31&tableName=TABLE31&tableView=进口保健食品&Id=";
+    //    public static String baseurl = "http://app1.sfda.gov.cn/datasearch/face3/content.jsp?tableId=31&tableName=TABLE31&tableView=进口保健食品&Id=";
     public static String baseurl = "http://app1.sfda.gov.cn/datasearch/face3/content.jsp?tableId=26&tableName=TABLE26&tableView=国产器械&Id=";
 
     ExecutorService executor = Executors.newCachedThreadPool();
@@ -36,10 +34,13 @@ public class HomeMadeInstrumentController {
     @Autowired
     private HomeMadeInstrumentServiceImpl service;
 
-    @RequestMapping("/query2")
+    @RequestMapping("/queryInstrumentid")
     public String queryPageIds() {
-//        List<Long> list = service.queryPageIds();
-//        System.out.println(list.size());
+        List<Long> list = service.queryPageIds();
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println(list.get(i));
+        }
+        System.out.println(list.size());
         return "success";
     }
 
@@ -48,10 +49,12 @@ public class HomeMadeInstrumentController {
     public String addItem() {
         System.setProperty("webdriver.chrome.driver", ChromeDriver_path);
         List<ImportHealthyDrug> taskList = new ArrayList<ImportHealthyDrug>();
-//        existsList = service.queryPageIds();
+        existsList = service.queryPageIds();
 
-        dividMainWorkThreads(MAX_WORK_THEARD, 1000);
-//        dividMainWorkThreads(MAX_WORK_THEARD, 10);
+//        dividMainWorkThreads(MAX_WORK_THEARD + 10, 200000);没有相关信息
+//        dividMainWorkThreads(1, 10);
+//        dividSubWorkThreads(MAX_WORK_THEARD+10, 1, 1000);
+        dividSubWorkThreads(MAX_WORK_THEARD , 11000, 20000);
         return "添加成功！";
     }
 
@@ -223,6 +226,90 @@ public class HomeMadeInstrumentController {
                         HomeMadeInstrument model = detectPage(webdriver, page);
                         if (model != null) {
                             taskList.add(model);
+                        }
+                    }
+
+                    for (HomeMadeInstrument model :
+                            taskList) {
+                        try {
+                            service.addItem(model);
+                        } catch (Exception e) {
+                            System.out.println(model.toString());
+                            e.printStackTrace();
+                        }
+                    }
+
+                    System.out.println((System.currentTimeMillis() - start) / 1000.0 + "秒结束。");
+                    System.out.println((System.currentTimeMillis() - start) / 1000.0 / 60 + "分钟结束。");
+                    System.out.println((System.currentTimeMillis() - start) / 1000.0 / 60 / 60 + "小时结束。");
+
+                    webdriver.close();
+                }
+            });
+
+        }
+    }
+
+    public void dividSubWorkThreads(int threadNum, int start, int to) {
+        int totalNum = (to - start + 1);
+        int taskSize = totalNum / threadNum;
+
+        if (taskSize == 0) {
+            threadNum = 1;
+        }
+
+        if (totalNum % threadNum != 0) {
+            threadNum++;
+        }
+
+        for (int i = 0; i < threadNum; i++) {
+            int fromIndex, toIndex;
+            fromIndex = start + taskSize * i;
+
+            if (taskSize * (i + 1) > totalNum) {
+                toIndex = fromIndex + totalNum % taskSize;
+            } else {
+                toIndex = fromIndex + taskSize - 1;
+            }
+
+            if (taskSize == 0) {//强制初始化
+                toIndex = totalNum;
+            }
+
+            final int finalFromIndex = fromIndex;
+            final int finalToIndex = toIndex;
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    WebDriver webdriver = new ChromeDriver();
+                    List<HomeMadeInstrument> taskList = new ArrayList<HomeMadeInstrument>();
+
+                    long start = System.currentTimeMillis();
+                    System.out.println("开始 from page ( " + finalFromIndex + " to " + finalToIndex);
+
+                    for (int page = finalFromIndex; page <= finalToIndex; page++) {//主要分页
+                        if (isExist(page)) {
+                            System.out.println("page is exixt" + page);
+                            continue;
+                        }
+
+                        HomeMadeInstrument model = detectPage(webdriver, page);
+                        if (model != null) {
+                            taskList.add(model);
+
+                            if (taskList.size() == 20) {
+                                for (HomeMadeInstrument m :
+                                        taskList) {
+                                    try {
+                                        service.addItem(m);
+                                    } catch (Exception e) {
+                                        System.out.println(m.toString());
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                taskList.clear();
+                            }
                         }
                     }
 

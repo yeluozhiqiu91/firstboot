@@ -24,7 +24,6 @@ import static com.wang.chrome.Const.MAX_WORK_THEARD;
  */
 @Controller
 public class HomeMadeHealthDrugController {
-
     //    public static String baseurl = "http://app1.sfda.gov.cn/datasearch/face3/content.jsp?tableId=31&tableName=TABLE31&tableView=进口保健食品&Id=";
     public static String baseurl = "http://app1.sfda.gov.cn/datasearch/face3/content.jsp?tableId=30&tableName=TABLE30&tableView=国产保健食品&Id=";
 
@@ -47,8 +46,8 @@ public class HomeMadeHealthDrugController {
         List<ImportHealthyDrug> taskList = new ArrayList<ImportHealthyDrug>();
 //        existsList = service.queryPageIds();
 
-//        dividMainWorkThreads(MAX_WORK_THEARD, 1000);
-        dividMainWorkThreads(1, 2);
+        dividMainWorkThreads(MAX_WORK_THEARD, 20000);
+//        dividMainWorkThreads(1, 2);
         return "添加成功！";
     }
 
