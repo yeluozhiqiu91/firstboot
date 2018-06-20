@@ -54,7 +54,8 @@ public class HomeMadeInstrumentController {
 //        dividMainWorkThreads(MAX_WORK_THEARD + 10, 200000);没有相关信息
 //        dividMainWorkThreads(1, 10);
 //        dividSubWorkThreads(MAX_WORK_THEARD+10, 1, 1000);
-        dividSubWorkThreads(MAX_WORK_THEARD , 11000, 20000);
+//        dividSubWorkThreads(MAX_WORK_THEARD , 11000, 20000);
+        dividSubWorkThreads(MAX_WORK_THEARD , 20000, 30000);
         return "添加成功！";
     }
 
