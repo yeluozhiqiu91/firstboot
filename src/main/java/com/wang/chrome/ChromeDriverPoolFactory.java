@@ -2,6 +2,7 @@ package com.wang.chrome;
 
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
+import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -30,6 +31,6 @@ public class ChromeDriverPoolFactory extends BasePooledObjectFactory<WebDriver> 
 
     @Override
     public PooledObject<WebDriver> wrap(WebDriver webDriver) {
-        return null;
+        return new DefaultPooledObject<WebDriver>(webDriver);
     }
 }
