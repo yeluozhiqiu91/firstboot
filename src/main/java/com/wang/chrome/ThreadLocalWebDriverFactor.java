@@ -46,14 +46,14 @@ public class ThreadLocalWebDriverFactor {
 
 
     public WebDriver getWebDriver() {
-//        return webDriver.get();
+        return webDriver.get();
 
-        ChromeOptions options = new ChromeOptions();
-//        options.addArguments("--headless");
-//        options.addArguments("--start-maximized");
-//        Instantiate Web Driver
-        WebDriver webdriver = new ChromeDriver(options);
-        return webdriver;
+//        ChromeOptions options = new ChromeOptions();
+////        options.addArguments("--headless");
+////        options.addArguments("--start-maximized");
+////        Instantiate Web Driver
+//        WebDriver webdriver = new ChromeDriver(options);
+//        return webdriver;
     }
 
     public void setWebDriver(WebDriver webDriver) {

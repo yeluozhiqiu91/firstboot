@@ -61,7 +61,7 @@ public class BaseController {
             logger.info("总分页数查询失败", "totalPage:" + totalPage);
             return;
         }
-        dividSubWorkThreads(MAX_WORK_THEARD, 1, 2);
+        dividSubWorkThreads(MAX_WORK_THEARD, 1, 1);
     }
 
 
@@ -143,12 +143,11 @@ public class BaseController {
             } else {
                 List<WebElement> webElementList = webdriver.findElement(By.cssSelector(".listmain")).findElements(By.tagName("tr"));
                 model = initPageItem(webElementList, url, pageId);
-
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        webdriver.close();
         return model;
     }
 
