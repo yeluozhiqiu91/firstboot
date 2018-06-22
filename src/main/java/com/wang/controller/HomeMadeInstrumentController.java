@@ -1,5 +1,6 @@
 package com.wang.controller;
 
+import com.wang.chrome.ThreadLocalWebDriverFactor;
 import com.wang.model.HomeMadeInstrument;
 import com.wang.model.ImportHealthyDrug;
 import com.wang.service.impl.HomeMadeInstrumentServiceImpl;
@@ -7,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +27,14 @@ import static com.wang.chrome.Const.MAX_WORK_THEARD;
  */
 @Controller
 public class HomeMadeInstrumentController {
-    //    public static String baseurl = "http://app1.sfda.gov.cn/datasearch/face3/content.jsp?tableId=31&tableName=TABLE31&tableView=进口保健食品&Id=";
+    /**
+     * 列表页 get  分页请求头，
+     */
+    public static String pagedListURL = "http://app1.sfda.gov.cn/datasearch/face3/content.jsp?tableId=26&tableName=TABLE26&tableView=国产器械&Id=";
+
+    /**
+     * 详情页 get请求头，
+     */
     public static String baseurl = "http://app1.sfda.gov.cn/datasearch/face3/content.jsp?tableId=26&tableName=TABLE26&tableView=国产器械&Id=";
 
     ExecutorService executor = Executors.newCachedThreadPool();
@@ -51,11 +60,11 @@ public class HomeMadeInstrumentController {
         List<ImportHealthyDrug> taskList = new ArrayList<ImportHealthyDrug>();
         existsList = service.queryPageIds();
 
-//        dividMainWorkThreads(MAX_WORK_THEARD + 10, 200000);没有相关信息
-//        dividMainWorkThreads(1, 10);
-//        dividSubWorkThreads(MAX_WORK_THEARD+10, 1, 1000);
-//        dividSubWorkThreads(MAX_WORK_THEARD , 11000, 20000);
-        dividSubWorkThreads(MAX_WORK_THEARD , 20000, 30000);
+        //patche
+//        dividSubWorkThreads(MAX_WORK_THEARD , 94987, 100000);
+
+        //full task
+        dividSubWorkThreads(MAX_WORK_THEARD, 1, 100000);
         return "添加成功！";
     }
 
@@ -247,7 +256,6 @@ public class HomeMadeInstrumentController {
                     webdriver.close();
                 }
             });
-
         }
     }
 
@@ -282,7 +290,13 @@ public class HomeMadeInstrumentController {
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    WebDriver webdriver = new ChromeDriver();
+                    //Set Chrome Headless mode as TRUE
+                    ChromeOptions options = new ChromeOptions();
+                    options.addArguments("--headless");
+
+                    //Instantiate Web Driver
+                    WebDriver webdriver = ThreadLocalWebDriverFactor.getInstance().getWebDriver();
+
                     List<HomeMadeInstrument> taskList = new ArrayList<HomeMadeInstrument>();
 
                     long start = System.currentTimeMillis();

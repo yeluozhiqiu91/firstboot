@@ -1,8 +1,24 @@
 package com.wang.model;
 
+/**
+ * 数据库 持久化对象
+ * Note taskName  和pageId  作为联合主键
+ */
 public class BaseModel {
-    public String url;
+    /**
+     * 任务名称 ：如“国产器械”，“进口器械”等。
+     */
+    public String taskName;
+    /**
+     * 详情页 页面id。
+     */
     public long pageId;
+
+
+    /**
+     * 详情页url
+     */
+    public String url;
 
     /**
      * 50列
@@ -473,6 +489,14 @@ public class BaseModel {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
     }
 
     @Override

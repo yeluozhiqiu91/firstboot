@@ -8,3 +8,4 @@ import com.wang.model.ImportDrugs;
 public interface ImportDrugsService {
     public void addImportDrugs(ImportDrugs importDrugs);
 }
+
