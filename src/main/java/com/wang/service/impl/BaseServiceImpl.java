@@ -1,11 +1,8 @@
 package com.wang.service.impl;
 
 import com.wang.mapper.BaseMapper;
-import com.wang.mapper.HomeMadeInstrumentMapper;
 import com.wang.model.BaseModel;
-import com.wang.model.HomeMadeInstrument;
 import com.wang.service.BaseService;
-import com.wang.service.HomeMadeInstrumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +28,7 @@ public class BaseServiceImpl implements BaseService {
     }
 
     @Override
-    public List<Long> queryPageIds() {
-        return mapper.queryPageIds();
+    public List<Long> queryPageIds(String taskname) {
+        return mapper.queryPageIds(taskname);
     }
 }

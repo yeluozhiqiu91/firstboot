@@ -1,6 +1,7 @@
 package com.wang;
 
-import com.wang.controller.BaseController;
+import com.wang.task.BaseController;
+import com.wang.task.TaskParam;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +39,14 @@ public class SampleController {
         long startTime = System.currentTimeMillis();
 
 //        baseController.initTotalPage();
-        baseController.startTask();
+
+
+        TaskParam taskParam = new TaskParam("国产器械"
+                , "http://app1.sfda.gov.cn/datasearch/face3/search.jsp?tableId=26&State=1&bcId=118103058617027083838706701567&State=1&tableName=TABLE26&State=1&viewtitleName=COLUMN184&State=1&viewsubTitleName=COLUMN181,COLUMN180&State=1&State=1&tableView=%25E5%259B%25BD%25E4%25BA%25A7%25E5%2599%25A8%25E6%25A2%25B0&State=1&curstart="
+                , "http://app1.sfda.gov.cn/datasearch/face3/content.jsp?tableId=26&tableName=TABLE26&tableView=国产器械&Id=");
+
+
+        baseController.startTask(taskParam);
 
 
 

@@ -127,7 +127,7 @@
         #{item.c50}
         )
     </insert>
-    <select id="queryPageIds" resultType="Long">
-        select pageId from base
+    <select id="queryPageIds" resultType="Long" parameterType="String">
+        select pageId from base where  taskName = #{taskName}
     </select>
 </mapper>

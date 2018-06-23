@@ -1,8 +1,8 @@
-package com.wang.controller;
+package com.wang.task;
 
-import com.wang.chrome.ThreadLocalWebDriverFactor;
+
+import com.wang.chrome.ChromeWebDriver;
 import com.wang.model.BaseModel;
-import com.wang.model.ImportHealthyDrug;
 import com.wang.service.impl.BaseServiceImpl;
 import com.wang.utils.RegexUtils;
 import org.openqa.selenium.By;
@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.wang.chrome.Const.ChromeDriver_path;
 import static com.wang.chrome.Const.MAX_WORK_THEARD;
 
 /**
@@ -30,15 +29,8 @@ import static com.wang.chrome.Const.MAX_WORK_THEARD;
 @Controller
 public class BaseController {
     private static final Logger logger = LoggerFactory.getLogger(BaseController.class);
-    /**
-     * 列表页 get  分页请求头，
-     */
-    public static String pagedListURL = "http://app1.sfda.gov.cn/datasearch/face3/search.jsp?tableId=26&State=1&bcId=118103058617027083838706701567&State=1&tableName=TABLE26&State=1&viewtitleName=COLUMN184&State=1&viewsubTitleName=COLUMN181,COLUMN180&State=1&State=1&tableView=%25E5%259B%25BD%25E4%25BA%25A7%25E5%2599%25A8%25E6%25A2%25B0&State=1&curstart=";
 
-    /**
-     * 详情页 get请求头，
-     */
-    public static String baseurl = "http://app1.sfda.gov.cn/datasearch/face3/content.jsp?tableId=26&tableName=TABLE26&tableView=国产器械&Id=";
+    private TaskParam taskParam;
 
     /**
      * 总分页数目
@@ -49,28 +41,39 @@ public class BaseController {
      */
     private int totalCount = 0;
 
+    /**
+     * 数据口中已经插入的条目数
+     */
+    private int total_exist = 0;
+
     ExecutorService executor = Executors.newCachedThreadPool();
 
     List<Long> existsList = new ArrayList<Long>();
     @Autowired
     private BaseServiceImpl service;
 
-    public void startTask() {
+    public void startTask(TaskParam taskParam) {
+        this.taskParam = taskParam;
+
         initTotalPage();
         if (totalPage <= 0) {
             logger.info("总分页数查询失败", "totalPage:" + totalPage);
             return;
         }
-        dividSubWorkThreads(MAX_WORK_THEARD, 1, 1);
+        queryPageIds();
+        dividSubWorkThreads(MAX_WORK_THEARD, 1, totalPage);
+//        dividSubWorkThreads(2, 1, 10);
     }
 
 
     public String queryPageIds() {
-        List<Long> list = service.queryPageIds();
+        List<Long> list = service.queryPageIds(taskParam.taskName);
         for (int i = 0; i < list.size(); i++) {
             System.out.println(list.get(i));
         }
         System.out.println(list.size());
+        existsList.clear();
+        existsList.addAll(list);
         return "success";
     }
 
@@ -87,15 +90,17 @@ public class BaseController {
      */
     public int initTotalPage() {
         int result = 0;
-        WebDriver webDriver = ThreadLocalWebDriverFactor.getInstance().getWebDriver();
+        WebDriver webdriver = ChromeWebDriver.getWebDriver(false);
+
+
         String pageIndex = "1";
-        webDriver.get(pagedListURL + pageIndex);//默认拿第一页来查
+        webdriver.get(taskParam.pagedListURL + pageIndex);//默认拿第一页来查
 
         String totalPageString = "";
         String totalMissioncount = "";
         try {
-            totalPageString = RegexUtils.getFirstMatch(webDriver.getPageSource().toString(), "共", "\\d+", "页");
-            totalMissioncount = RegexUtils.getFirstMatch(webDriver.getPageSource().toString(), "共", "\\d+", "条");
+            totalPageString = RegexUtils.getFirstMatch(webdriver.getPageSource().toString(), "共", "\\d+", "页");
+            totalMissioncount = RegexUtils.getFirstMatch(webdriver.getPageSource().toString(), "共", "\\d+", "条");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -108,8 +113,7 @@ public class BaseController {
         }
 
         logger.info("总分页数" + totalPage + "     总条数 ： " + totalMissioncount);
-        webDriver.close();
-
+        webdriver.close();
         return result;
     }
 
@@ -122,11 +126,13 @@ public class BaseController {
         }
     }
 
-    private BaseModel detectPage(int pageId) {
-        WebDriver webdriver = ThreadLocalWebDriverFactor.getInstance().getWebDriver();
+    private BaseModel detectPage(WebDriver webdriver, int pageId) {
+//        WebDriver webdriver = webdriver = ChromeWebDriver.getWebDriver();
+
+
         BaseModel model = null;
         try {
-            String url = baseurl + (pageId);
+            String url = taskParam.baseurl + (pageId);
             webdriver.get(url);
 
             boolean haspage = true;
@@ -147,12 +153,15 @@ public class BaseController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        webdriver.close();
+
+//        webdriver.close();
+
         return model;
     }
 
     private BaseModel initPageItem(List<WebElement> webElementList, String url, int pageId) {
         BaseModel item = new BaseModel();
+        item.taskName = taskParam.taskName;
         item.pageId = pageId;
         item.url = url;
 
@@ -344,7 +353,7 @@ public class BaseController {
             if (taskSize * (i + 1) > totalNum) {
                 toIndex = fromIndex + totalNum % taskSize;
             } else {
-                toIndex = fromIndex + taskSize - 1;
+                toIndex = fromIndex + taskSize;
             }
 
             if (taskSize == 0) {//强制初始化
@@ -356,18 +365,16 @@ public class BaseController {
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println("开始 from page ( " + finalFromIndex + " to " + finalToIndex);
 //                    每页15条
-                    for (int page = finalFromIndex; page <= finalToIndex; page++) {//主要分页
-                        if (isExist(page)) {
-                            System.out.println("page is exixt" + page);
-                            continue;
-                        }
+                    System.out.println("开始 from page [ " + finalFromIndex + " to " + (finalToIndex) + ")");
+                    for (int page = finalFromIndex; page < finalToIndex; page++) {//主要分页
+
+                        System.out.println("current pageIndex  :" + page);
+
                         getCurrent_PageIdList(page);
                     }
                 }
             });
-
         }
     }
 
@@ -381,12 +388,13 @@ public class BaseController {
         long start = System.currentTimeMillis();
 
         List<BaseModel> list = new ArrayList<BaseModel>();
-        WebDriver webDriver = ThreadLocalWebDriverFactor.getInstance().getWebDriver();
-        webDriver.get(pagedListURL + currentPageIndex);
+        WebDriver webdriver = webdriver = ChromeWebDriver.getWebDriver();
+
+        webdriver.get(taskParam.pagedListURL + currentPageIndex);
 
         List<Integer> currentPageIdlist = new ArrayList<Integer>();
 
-        List<WebElement> elements = webDriver.findElements(By.xpath("//a[contains(@href, 'content.jsp?tableId=')]"));
+        List<WebElement> elements = webdriver.findElements(By.xpath("//a[contains(@href, 'content.jsp?tableId=')]"));
         for (WebElement ele : elements) {
             String id = RegexUtils.getFirstMatch(ele.getAttribute("href").toString(), "&Id=", "\\d+", "',");
             Integer pageId = null;
@@ -399,16 +407,22 @@ public class BaseController {
                 logger.error(ele.getAttribute("href"));
             }
         }
-        webDriver.close();
-
 
 
         for (int i = 0; i < currentPageIdlist.size(); i++) {
-            BaseModel model = detectPage(currentPageIdlist.get(i));
+            int pageId = currentPageIdlist.get(i);
+
+            if (isExist(pageId)) {
+                System.out.println("page is exixt" + pageId + "     exixtCount : " + ++total_exist);//当前数据已经存在
+                continue;
+            }
+
+            BaseModel model = detectPage(webdriver, pageId);
             if (model != null) {
                 list.add(model);
             }
         }
+        webdriver.close();
 
 
         //每跑完一页就保存一次

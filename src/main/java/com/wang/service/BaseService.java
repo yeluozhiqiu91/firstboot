@@ -10,5 +10,5 @@ import java.util.List;
 public interface BaseService {
     public void addItem(BaseModel item);
 
-    public List<Long> queryPageIds();
+    public List<Long> queryPageIds(String taskname);
 }
