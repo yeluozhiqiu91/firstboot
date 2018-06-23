@@ -8,7 +8,7 @@ import static com.wang.chrome.Const.ChromeDriver_path;
 
 public class ChromeWebDriver {
 
-    private boolean hasUI = true;
+    private boolean hasUI = false;
 
     /**
      * 默认 有UI
@@ -16,7 +16,7 @@ public class ChromeWebDriver {
      * @return
      */
     public static WebDriver getWebDriver() {
-        return getWebDriver(true);
+        return getWebDriver(false);
     }
 
     /**
