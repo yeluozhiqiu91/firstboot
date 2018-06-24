@@ -128,6 +128,20 @@
         )
     </insert>
     <select id="queryPageIds" resultType="Long" parameterType="String">
-        select pageId from base where  taskName = #{taskName}
+        select pageId from base where taskName = #{taskName}
     </select>
+
+    <insert id="insertFailed" parameterType="com.wang.model.FailedModel">
+        INSERT INTO failed
+        (
+        taskName,
+        pageId
+        )
+        VALUES
+        (
+        #{item.taskName},
+        #{item.pageId}
+        )
+    </insert>
+
 </mapper>

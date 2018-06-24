@@ -3,6 +3,7 @@ package com.wang.task;
 
 import com.wang.chrome.ChromeWebDriver;
 import com.wang.model.BaseModel;
+import com.wang.model.FailedModel;
 import com.wang.service.impl.BaseServiceImpl;
 import com.wang.utils.RegexUtils;
 import org.openqa.selenium.By;
@@ -62,7 +63,7 @@ public class BaseController {
         }
         queryPageIds();
         dividSubWorkThreads(MAX_WORK_THEARD, 1, totalPage);
-//        dividSubWorkThreads(2, 1, 10);
+//        dividSubWorkThreads(1, 9000, 9000);
     }
 
 
@@ -127,35 +128,23 @@ public class BaseController {
     }
 
     private BaseModel detectPage(WebDriver webdriver, int pageId) {
-//        WebDriver webdriver = webdriver = ChromeWebDriver.getWebDriver();
-
-
         BaseModel model = null;
         try {
+//            throw new Exception();
             String url = taskParam.baseurl + (pageId);
             webdriver.get(url);
 
-            boolean haspage = true;
-            try {//a[contains(@href, ‘logout’)]
-                haspage = webdriver.findElement(By.xpath("//div[contains(@class,'listmain')]")).findElements(By.tagName("tr")).get(2).getText().equals("没有相关信息");
-            } catch (Exception e) {
-//                e.printStackTrace();
-                haspage = false;
-            }
-
-            if (haspage) {//空白页
-                System.out.println("----  " + pageId);
-                return null;
-            } else {
-                List<WebElement> webElementList = webdriver.findElement(By.cssSelector(".listmain")).findElements(By.tagName("tr"));
-                model = initPageItem(webElementList, url, pageId);
-            }
+            List<WebElement> webElementList = webdriver.findElement(By.cssSelector(".listmain")).findElements(By.tagName("tr"));
+            model = initPageItem(webElementList, url, pageId);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error("detectPage Failded  pageid=" + pageId);
+
+            FailedModel failedModel = new FailedModel();
+            failedModel.taskName = taskParam.taskName;
+            failedModel.pageId = pageId;
+            service.insertFailed(failedModel);
         }
-
-//        webdriver.close();
-
         return model;
     }
 
@@ -365,12 +354,8 @@ public class BaseController {
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-//                    每页15条
-                    System.out.println("开始 from page [ " + finalFromIndex + " to " + (finalToIndex) + ")");
+                    System.out.println("开始 from page [ " + finalFromIndex + " to " + (finalToIndex) + ")");//                    每页15条
                     for (int page = finalFromIndex; page < finalToIndex; page++) {//主要分页
-
-                        System.out.println("current pageIndex  :" + page);
-
                         getCurrent_PageIdList(page);
                     }
                 }
@@ -386,6 +371,7 @@ public class BaseController {
      */
     public void getCurrent_PageIdList(int currentPageIndex) {
         long start = System.currentTimeMillis();
+        logger.info("current pageIndex  :" + currentPageIndex);
 
         List<BaseModel> list = new ArrayList<BaseModel>();
         WebDriver webdriver = webdriver = ChromeWebDriver.getWebDriver();
@@ -400,6 +386,10 @@ public class BaseController {
             Integer pageId = null;
             try {
                 pageId = Integer.parseInt(id);
+                if (isExist(pageId)) {
+                    System.out.println("page is exixt" + pageId + "     exixtCount : " + ++total_exist);//当前数据已经存在
+                    continue;
+                }
                 currentPageIdlist.add(pageId);
                 logger.info("id:  " + id);
             } catch (NumberFormatException e) {
@@ -411,12 +401,6 @@ public class BaseController {
 
         for (int i = 0; i < currentPageIdlist.size(); i++) {
             int pageId = currentPageIdlist.get(i);
-
-            if (isExist(pageId)) {
-                System.out.println("page is exixt" + pageId + "     exixtCount : " + ++total_exist);//当前数据已经存在
-                continue;
-            }
-
             BaseModel model = detectPage(webdriver, pageId);
             if (model != null) {
                 list.add(model);
@@ -436,10 +420,9 @@ public class BaseController {
             }
         }
 
-        System.out.println((System.currentTimeMillis() - start) / 1000.0 + "秒结束。");
-        System.out.println((System.currentTimeMillis() - start) / 1000.0 / 60 + "分钟结束。");
-        System.out.println((System.currentTimeMillis() - start) / 1000.0 / 60 / 60 + "小时结束。");
-
+        logger.info("本页面 " + currentPageIndex + "  耗时 " + (System.currentTimeMillis() - start) / 1000.0 / 60 / 60 + "小时"
+                + (System.currentTimeMillis() - start) / 1000.0 / 60 + "分钟,"
+                + (System.currentTimeMillis() - start) / 1000.0 + "秒结束。");
     }
 
 

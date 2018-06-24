@@ -5,7 +5,7 @@ public class Const {
     /**
      * 线程数在机器核心数附近
      */
-    public static final int MAX_WORK_THEARD = Runtime.getRuntime().availableProcessors() + 6;
+    public static final int MAX_WORK_THEARD = Runtime.getRuntime().availableProcessors() + 4;
 
     public static int MISSION_COUNT = 0;
 }
