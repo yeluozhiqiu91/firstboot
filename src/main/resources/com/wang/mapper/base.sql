@@ -67,4 +67,27 @@ CREATE TABLE `base`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'base' ROW_FORMAT = Compact;
 
+
+
+
+
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for homemadeinstrument
+-- ----------------------------
+DROP TABLE IF EXISTS `failed`;
+CREATE TABLE `failed`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `taskName` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+   `pageId` decimal(42, 0) NULL DEFAULT NULL,
+
+
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'base' ROW_FORMAT = Compact;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
 SET FOREIGN_KEY_CHECKS = 1;
